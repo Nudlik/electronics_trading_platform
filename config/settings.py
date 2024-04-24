@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'products.apps.ProductsConfig',
     'grocery_chains.apps.GroceryChainConfig',
+
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
