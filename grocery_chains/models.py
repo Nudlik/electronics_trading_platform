@@ -1,12 +1,8 @@
 from django.db import models
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-
-from products.models import Product
 
 
 class GroceryChain(models.Model):
-
     class STRUCTURE(models.TextChoices):
         factory = 'factory', _('Завод')
         retail = 'retail', _('Розничная сеть')
@@ -14,7 +10,6 @@ class GroceryChain(models.Model):
 
     name = models.CharField(max_length=100, unique=True, verbose_name='название')
     type_structure = models.CharField(max_length=50, choices=STRUCTURE.choices, verbose_name='структура')
-    products = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='продукты')
     provider = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='поставщик')
     debt = models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name='задолженность')
     date_created = models.DateField(auto_now_add=True, verbose_name='дата создания')
@@ -31,6 +26,3 @@ class GroceryChain(models.Model):
 
     def __str__(self):
         return self.name
-
-    def get_absolute_url(self):
-        return reverse('grocery_chains:detail', kwargs={'pk': self.pk})
