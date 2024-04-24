@@ -3,6 +3,12 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 from grocery_chains.models import GroceryChain
+from products.models import Product
+
+
+class ProductInline(admin.TabularInline):
+    model = Product
+    extra = 1
 
 
 @admin.register(GroceryChain)
@@ -10,6 +16,7 @@ class GroceryChainAdmin(admin.ModelAdmin):
     list_display = ['name', 'debt', 'provider_link', 'country', 'city']
     list_filter = ['city']
     actions = ['clear_debts']
+    inlines = [ProductInline]
 
     @admin.display(description='поставщик')
     def provider_link(self, obj):
