@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -13,6 +14,7 @@ class GroceryChain(models.Model):
     provider = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='поставщик')
     debt = models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name='задолженность')
     date_created = models.DateField(auto_now_add=True, verbose_name='дата создания')
+    owner = models.ForeignKey(get_user_model(), on_delete=models.PROTECT, verbose_name='владелец')
 
     email = models.EmailField(max_length=100, unique=True, verbose_name='электронная почта')
     country = models.CharField(max_length=100, verbose_name='страна')
