@@ -7,4 +7,14 @@ class GroceryChainSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GroceryChain
-        fields = '__all__'
+        exclude = ['owner']
+
+    def create(self, validated_data):
+        validated_data['owner'] = self.context['request'].user
+        instance = self.Meta.model.objects.create(**validated_data)
+        instance.save()
+        return instance
+
+    def update(self, instance, validated_data):
+        validated_data['debt'] = instance.debt
+        return super().update(instance, validated_data)
