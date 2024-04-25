@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'django_filters',
     'djoser',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -148,4 +149,13 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'grocery_chains.permissions.IsActive'
     ]
+}
+
+# настройки djoser
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': False,
+    'SERIALIZERS': {},
 }
