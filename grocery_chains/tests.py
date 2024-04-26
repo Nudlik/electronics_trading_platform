@@ -20,6 +20,8 @@ class PermissionTestCase(TestCase):
     def test_permission_bad(self):
         url = reverse('grocery_chains:chains-list')
         self.user.is_active = False
+        self.user.save()
+        self.client.force_login(self.user)
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
