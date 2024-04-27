@@ -3,6 +3,7 @@ from rest_framework import viewsets
 
 from grocery_chains.filters import GroceryChainFilter
 from grocery_chains.models import GroceryChain
+from grocery_chains.permissions import IsOwnerOrReadOnly, IsActive
 from grocery_chains.serializers import GroceryChainSerializer
 
 
@@ -11,3 +12,4 @@ class GroceryChainViewSet(viewsets.ModelViewSet):
     serializer_class = GroceryChainSerializer
     filterset_class = GroceryChainFilter
     filter_backends = [DjangoFilterBackend]
+    permission_classes = [IsOwnerOrReadOnly, IsActive]
