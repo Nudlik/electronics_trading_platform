@@ -30,6 +30,7 @@ class GroceryChainsTestCase(TestCase):
 
     def setUp(self):
         self.user1 = get_user_model().objects.create(username='test', password='test')
+        self.user2 = get_user_model().objects.create(username='test2', password='test2')
 
         self.chain1 = GroceryChain.objects.create(
             name='chain1',
@@ -52,3 +53,31 @@ class GroceryChainsTestCase(TestCase):
         response = self.client.patch(url, data, 'application/json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(self.chain1.debt, 0)
+
+    def test_update_not_owner(self):
+        data = {
+            'name': 'chain2',
+        }
+        url = reverse('grocery_chains:chains-detail', args=[self.chain1.id])
+        self.client.force_login(self.user2)
+        response = self.client.patch(url, data, 'application/json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(self.chain1.name, 'chain1')
+
+    def test_get_detail_not_owner(self):
+        url = reverse('grocery_chains:chains-detail', args=[self.chain1.id])
+        self.client.force_login(self.user2)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_detail_owner(self):
+        url = reverse('grocery_chains:chains-detail', args=[self.chain1.id])
+        self.client.force_login(self.user1)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_list_not_owner(self):
+        url = reverse('grocery_chains:chains-list')
+        self.client.force_login(self.user2)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
